@@ -26,14 +26,11 @@ namespace GamesProcess2.Libs
             this.AddRange(items);
         }
 
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize, List<Game> _gamesList, List<GamesClass> _gamesGroups, int _gameSelection, int _groupSelection)
+        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize, List<Game> _gamesList, List<GamesClass> _gamesClasses)
         {
 
             GamesList = _gamesList;
-            GamesGroups = _gamesGroups;
-            GameSelection = _gameSelection;
-            GroupSelection = _groupSelection;
-
+            GamesGroups = _gamesClasses;
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
@@ -51,9 +48,6 @@ namespace GamesProcess2.Libs
             }
         }
 
-
-
-
         // to know if next page is available
         public bool HasNextPage
         {
@@ -64,18 +58,18 @@ namespace GamesProcess2.Libs
         }
 
         // takes page size and number and applies skip and take statement to the list
-        public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize/*, List<Game> _gamesList*/)
+        public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize, List<Game> _gamesList, List<GamesClass> _gamesClasses)
         {
             var count = await source.CountAsync();
             var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PaginatedList<T>(items, count, pageIndex, pageSize/*, _gamesList*/);
+            return new PaginatedList<T>(items, count, pageIndex, pageSize, _gamesList, _gamesClasses);
         }
 
         public static PaginatedList<T> Create(IQueryable<T> source, int pageIndex, int pageSize, List<Game> _gamesList, List<GamesClass> _gamesGroups, int _gameSelection, int _groupSelection)
         {
             var count = source.Count();
             var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-            return new PaginatedList<T>(items, count, pageIndex, pageSize, _gamesList, _gamesGroups, _gameSelection, _groupSelection);
+            return new PaginatedList<T>(items, count, pageIndex, pageSize, _gamesList, _gamesGroups);
         }
     }
 }

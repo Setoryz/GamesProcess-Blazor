@@ -51,13 +51,15 @@ namespace GamesProcess2.Controllers
             {
                 case "date_desc":
                     events = events.OrderByDescending(s => s.Date);
+                    events = events.OrderByDescending(s => s.GameID);
                     break;
                 default:
                     events = events.OrderBy(s => s.Date);
+                    events = events.OrderBy(s => s.GameID);
                     break;
             }
 
-            return View(await PaginatedList<Event>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Event>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize, (from games in _context.Games select games).ToList(), (from gamesClass in _context.GamesClass select gamesClass).ToList()));
         }
 
         #region GET: Events/Details
