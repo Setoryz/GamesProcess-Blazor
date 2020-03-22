@@ -1,6 +1,6 @@
 using System;
 
-namespace GamesProcess2._0.Models
+namespace GamesProcess2.Models
 {
     public class ErrorViewModel
     {

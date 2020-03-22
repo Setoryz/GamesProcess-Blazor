@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GamesProcess2._0.Models
+namespace GamesProcess2.Models
 {
     public class GamesClass
     {

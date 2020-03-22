@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace GamesProcess2._0.Models
+namespace GamesProcess2.Models
 {
     public class Event
     {

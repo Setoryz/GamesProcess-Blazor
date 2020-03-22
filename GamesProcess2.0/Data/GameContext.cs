@@ -1,7 +1,7 @@
-﻿using GamesProcess2._0.Models;
+﻿using GamesProcess2.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GamesProcess2._0.Data
+namespace GamesProcess2.Data
 {
     public class GameContext : DbContext
     {

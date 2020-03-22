@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using GamesProcess2._0.Models;
+using GamesProcess2.Models;
 
-namespace GamesProcess2._0.Controllers
+namespace GamesProcess2.Controllers
 {
     public class HomeController : Controller
     {

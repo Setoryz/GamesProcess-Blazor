@@ -8,4 +8,8 @@
     <Folder Include="Views\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GamesProcess2.0\GamesProcess2.0.csproj" />
+  </ItemGroup>
+
 </Project>
