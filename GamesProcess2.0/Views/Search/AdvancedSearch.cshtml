@@ -1,0 +1,306 @@
+﻿@model GamesProcess2.Models.ViewModels.SearchResultViewModel
+
+@{
+    ViewData["Title"] = "Advanced Search";
+    ViewData["Controller"] = "Search";
+    ViewData["ControllerName"] = "Search";
+    ViewData["PageTitle"] = "Advanced Search";
+
+    //int y = 1;
+
+    // No Of Weeks to Display
+    int maxNoOfWeeksToDisplay = 20;
+    int[] selectNoOfWeekstoDisplay = new int[maxNoOfWeeksToDisplay];
+    for (int i = 1, y = 0; i <= maxNoOfWeeksToDisplay; i++, y++)
+    {
+        selectNoOfWeekstoDisplay[y] = i;
+    }
+}
+
+<!-- Search Parameters -->
+<div class="row">
+
+    <div class="col-xs-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="card-box">
+
+            <h4 class="header-title m-t-0 m-b-30">
+                Enter Search Parameters
+            </h4>
+
+            <form asp-action="Search" method="get">
+
+                <!-- Search Modifier Rows-->
+                <div class="row">
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.NoOfSearchValues"></label>
+                            <select asp-for="@Model.SearchParameters.NoOfSearchValues" class="form-control" asp-items="@(new SelectList(Model.SearchParameters.SelectNoOfSearchValues))"></select>
+                            <small class="text-muted">
+                                This is the number of reference values to be searched for in the database
+                            </small>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.NoOfWeeksToDisplay"> </label>
+                            <select asp-for="@Model.SearchParameters.NoOfWeeksToDisplay" class="form-control" asp-items="@(new SelectList(selectNoOfWeekstoDisplay))"></select>
+                            <small class="text-muted">
+                                Number of weeks that will be displayed before & after the 1st ref value in the results
+                            </small>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.GameSelection"></label>
+                            <select asp-for="@Model.SearchParameters.GameSelection" class="form-control" asp-items="@(new SelectList(Model.SearchParameters.GamesList, "ID", "Name"))"></select>
+                            <small class="text-muted">
+                                This is the type of game where the search will be performed
+                            </small>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.GroupSelection"></label>
+                            <select asp-for="@Model.SearchParameters.GroupSelection" class="form-control" asp-items="@(new SelectList(Model.SearchParameters.GamesGroups, "ID", "Name"))"></select>
+                            <small class="text-muted">
+                                This is the type of group where the search will be performed. The option of Game Selection has to be in Select Groups for it to work.
+                            </small>
+                        </fieldset>
+                    </div>
+
+                </div>
+                <!-- End Search Modifier Row -->
+
+                <hr style="border-width: thick;" />
+
+                <!-- Reference Value Row -->
+                <div class="row">
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 ">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.ReferenceValue"></label><br />
+                            <input asp-for="@Model.SearchParameters.ReferenceValue" type="number" class="col-12 form-control" min="1" max="90" placeholder="Enter Reference Value"><br />
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.ReferenceLocation"></label>
+                            <select asp-for="@Model.SearchParameters.ReferenceLocation" class="form-control" asp-items="@(new SelectList(Model.SearchParameters.SelectLocation, "ID", "Name"))"></select>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.ReferencePosition"></label>
+                            <select asp-for="@Model.SearchParameters.ReferencePosition" asp-items="@(new SelectList(Model.SearchParameters.SelectPosition, "ID" , "Name"))" class="form-control"></select>
+                        </fieldset>
+                    </div>
+
+                </div>
+                <!-- End Reference Value Row -->
+
+                <hr style="border-width: thick;" />
+
+                <!-- 2nd Value Row -->
+                <div class="row">
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 ">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value2"></label><br />
+                            <input asp-for="@Model.SearchParameters.Value2" type="number" class="col-12 form-control" min="1" max="90" placeholder="Enter 2nd Search Value"><br />
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value2WeekSelect"></label>
+                            <select asp-for="@Model.SearchParameters.Value2WeekSelect" asp-items="@(new SelectList(Model.SearchParameters.SelectAltValWeekSel, "ID", "Name"))" class="form-control"></select>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value2Week"></label>
+                            <input asp-for="@Model.SearchParameters.Value2Week" type="number" class="col-12 form-control" min="-10" max="10" placeholder="Enter Weeks Apart"><br />
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value2Location"></label>
+                            <select asp-for="@Model.SearchParameters.Value2Location" class="form-control" asp-items="@(new SelectList(Model.SearchParameters.SelectLocation, "ID", "Name"))"></select>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value2Position"></label>
+                            <select asp-for="@Model.SearchParameters.Value2Position" asp-items="@(new SelectList(Model.SearchParameters.SelectPosition, "ID" , "Name"))" class="form-control"></select>
+                        </fieldset>
+                    </div>
+
+                </div>
+                <!-- End 2nd Value Row -->
+
+                <hr style="border-width: thick;" />
+
+                <!-- 3rd Value Row -->
+                <div class="row">
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 ">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value3"></label><br />
+                            <input asp-for="@Model.SearchParameters.Value3" type="number" class="col-12 form-control" min="1" max="90" placeholder="Enter 3rd Search Value"><br />
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value3WeekSelect"></label>
+                            <select asp-for="@Model.SearchParameters.Value3WeekSelect" asp-items="@(new SelectList(Model.SearchParameters.SelectAltValWeekSel, "ID", "Name"))" class="form-control"></select>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value3Week"></label>
+                            <input asp-for="@Model.SearchParameters.Value3Week" type="number" class="col-12 form-control" min="-10" max="10" placeholder="Enter Weeks Apart"><br />
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value3Location"></label>
+                            <select asp-for="@Model.SearchParameters.Value3Location" class="form-control" asp-items="@(new SelectList(Model.SearchParameters.SelectLocation, "ID", "Name"))"></select>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40">
+                        <fieldset class="form-group">
+                            <label asp-for="@Model.SearchParameters.Value3Position"></label>
+                            <select asp-for="@Model.SearchParameters.Value3Position" asp-items="@(new SelectList(Model.SearchParameters.SelectPosition, "ID" , "Name"))" class="form-control"></select>
+                        </fieldset>
+                    </div>
+
+                </div>
+                <!-- End 3rd Value Row -->
+
+                <hr style="border-width: thick;" />
+
+                <input type="submit" class="btn btn-primary" value="Search" />
+                <a asp-controller="Events" asp-action="Index" class="btn btn-warning">
+                    Back To Full List
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Table Result -->
+<div class="row">
+    <div class="col-12">
+        <div class="card-box table-responsive">
+            <h4 class="m-t-0 header-title"><b>Search Results</b></h4>
+            <p class="text-muted font-13 m-b-30">
+                These are the search results from the data you inputed.
+            </p>
+
+            <table id="datatable-buttons" class="table table-striped table-hover table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr class="table-active">
+                        <th>Result ID</th>
+                        <th>Event DB ID</th>
+                        <th>Date</th>
+                        <th>Event Number</th>
+
+                        <th>W1</th>
+                        <th>W2</th>
+                        <th>W3</th>
+                        <th>W4</th>
+                        <th>W5</th>
+                        <th></th>
+                        <th>M1</th>
+                        <th>M2</th>
+                        <th>M3</th>
+                        <th>M4</th>
+                        <th>M5</th>
+                        <th>Game Name</th>
+                        <th>Game Group</th>
+                    </tr>
+                </thead>
+
+                <tbody class="">
+                    @if (Model.SearchResults != null)
+                    {
+                        @foreach (var result in Model.SearchResults)
+                        {
+                            @foreach (var eventResult in result.Events)
+                            {
+                                bool isRefWeek = eventResult.EventID == result.ReferenceEventID;
+                                bool isVal2Week = (eventResult.EventID == result.Value2EventID);
+                                bool isVal3Week = (eventResult.EventID == result.Value3EventID);
+
+                                var higlightRefWeek = (isRefWeek) ? "table-success" : "";
+                                var higlightOtherValWeek = (isVal2Week || isVal3Week) ? "table-info" : "";
+
+                                <tr class="@higlightRefWeek @higlightOtherValWeek">
+                                    <td>@result.ID</td>
+                                    <td>@eventResult.EventID</td>
+                                    <td>@eventResult.Date</td>
+                                    <td>@eventResult.EventNumber</td>
+
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        var highlightRefVal = (isRefWeek && eventResult.Winning[i] == Model.SearchParameters.ReferenceValue) ? "text-danger" : "";
+                                        var highlight2ndVal = (isVal2Week && eventResult.Winning[i] == Model.SearchParameters.Value2) ? "text-danger" : "";
+                                        var highlight3rdVal = (isVal3Week && eventResult.Winning[i] == Model.SearchParameters.Value3) ? "text-danger" : "";
+
+                                        <td class="@highlightRefVal @highlight2ndVal @highlight3rdVal">@eventResult.Winning[i]</td>
+                                    }
+                                    <td></td>
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        var highlight2ndVal = (isVal2Week && eventResult.Machine[i] == Model.SearchParameters.Value2) ? "text-danger" : "";
+                                        var highlight3rdVal = (isVal3Week && eventResult.Machine[i] == Model.SearchParameters.Value3) ? "text-danger" : "";
+                                        var highlightRefVal = (isRefWeek && eventResult.Machine[i] == Model.SearchParameters.ReferenceValue) ? "text-danger" : "";
+
+                                        <td class="@highlightRefVal @highlight2ndVal @highlight3rdVal">@eventResult.Machine[i]</td>
+                                    }
+
+                                    <td>
+                                        @Model.SearchParameters.GamesList.Skip(eventResult.GameID).First().Name.ToString()
+                                    </td>
+
+                                    <td>
+                                        @Model.SearchParameters.GamesGroups.Skip((Model.SearchParameters.GamesList.Skip(eventResult.GameID).First().GamesClassID)).First().Name.ToString()
+                                    </td>
+                                </tr>
+                            }
+                            @for (int i = 0; i < 2; i++)
+                            {
+                                <tr>
+                                    @for (int j = 0; j < 17; j++)
+                                    {
+                                        <td></td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+<!-- end row -->

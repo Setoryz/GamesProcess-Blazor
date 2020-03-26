@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200325155726_TodoItemAdded.cs" />
+    <Compile Remove="Migrations\20200325155726_TodoItemAdded.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\images\banner1.svg" />
     <None Include="wwwroot\images\banner2.svg" />
     <None Include="wwwroot\images\banner3.svg" />

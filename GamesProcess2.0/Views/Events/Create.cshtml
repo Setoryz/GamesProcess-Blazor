@@ -1,0 +1,62 @@
+﻿@model GamesProcess2.Models.Event
+
+@{
+    ViewData["Title"] = "Add Event";
+    ViewData["Controller"] = "Events";
+    ViewData["ControllerName"] = "Events";
+    ViewData["PageTitle"] = "Add Events";
+}
+
+@*<h2>Create</h2>*@
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>Event</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="EventID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="EventID" class="form-control" />
+                <span asp-validation-for="EventID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="GameID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="GameID" class="form-control" asp-items="ViewBag.GameID"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Date" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="WinningValues" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="WinningValues" class="form-control" />
+                <span asp-validation-for="WinningValues" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MachineValues" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MachineValues" class="form-control" />
+                <span asp-validation-for="MachineValues" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
