@@ -1,0 +1,8 @@
+{
+  "solution": {
+    "path": "GamesProcess.sln",
+    "projects": [
+      "GamesProcess.Blazor\\GamesProcess.Blazor.csproj"
+    ]
+  }
+}
