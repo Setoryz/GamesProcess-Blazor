@@ -1,3 +1,22 @@
 ﻿@inherits LayoutComponentBase
+@* Main Content *@
 
-<Home></Home>
+<div class="content-page">
+
+    <div class="content">
+
+        <div class="container-fluid">
+
+            @Body
+
+        </div>
+
+    </div>
+
+</div>
+
+<RightSideBar />
+
+<footer class="footer text-right">
+    &copy;@DateTime.Now setoryz@gmail.com.
+</footer>

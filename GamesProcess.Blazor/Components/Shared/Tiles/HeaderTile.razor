@@ -1,0 +1,10 @@
+﻿<div class="col-xs-12 col-md-12 col-lg-12 col-xl-12">
+    <div class="card-box tilebox-one">
+        <h1>@ChildContent</h1>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

@@ -1,0 +1,152 @@
+﻿@using GamesProcess.Models.ViewModels
+@using GamesProcess.Blazor.Components.Shared.SearchComponents
+@inherits OwningComponentBase<GamesProcess.Data.Services.EventDbService>
+
+<div class="col-xs-12 col-md-12 col-lg-12 col-xl-12">
+    <div class="card-box">
+
+        <h4 class="header-title m-t-0 m-b-30">
+            Enter Search Parameters
+        </h4>
+
+        <EditForm Model="@Model">
+            <DataAnnotationsValidator />
+
+            @*BEGIN: Search Modifier Row*@
+            <Row>
+                <FormFieldset>
+                    <label>Number of Search Values</label>
+                    <InputSelect @bind-Value="Model.NoOfSearchValues" class="form-control">
+                        @foreach (var item in Model.SelectNoOfSearchValues)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </InputSelect>
+                    <small class="text-muted"> This is the number of reference values to be searched for in the db</small>
+                </FormFieldset>
+
+                <FormFieldset>
+                    <label>Number of Weeks to Display</label>
+                    <InputSelect @bind-Value="Model.NoOfWeeksToDisplay" class="form-control">
+                        @foreach (var item in _SelectNoOfWeeksToDisplay)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </InputSelect>
+                    <small class="text-muted">Number of weeks that will be displayed before & after the 1st ref value in the results</small>
+                </FormFieldset>
+
+                <FormFieldset style="visibility:visible;">
+                    <label>Game Selection</label>
+                    <InputSelect @bind-Value="Model.GameSelection" class="form-control">
+                        @foreach (var item in Model.GamesList)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </InputSelect>
+                    <small class="text-muted"> This is the type of game where the search will be performed </small>
+                </FormFieldset>
+
+                <FormFieldset>
+                    <label>Group Selection</label>
+                    <InputSelect @bind-Value="Model.GroupSelection" class="form-control">
+                        @foreach (var item in Model.GamesGroups)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </InputSelect>
+                    <small class="text-muted"> This is the type of group where the search will be performed. The option of Game Selection has to be in Select Groups for it to work. </small>
+                </FormFieldset>
+            </Row>
+            @*END: Search Modifier Row*@
+
+            <hr style="border-width: thick;" />
+
+            @*BEGIN: Reference Values Row*@
+            <Row>
+                <FormFieldset HasTopSmMargin="false">
+                    <label>Reference Value</label>
+                    <InputNumber @ref="_referenceValue" @bind-Value="Model.ReferenceValue" @ondeactivate="_ReferenceValueInputed" class="form-control" placeholder="Enter Reference Value" />
+                    <ValidationMessage For="(() => Model.ReferenceValue)" style="color: red;" />
+                </FormFieldset>
+
+                <FormFieldset>
+                    <label>Where to Search Reference Value</label>
+                    <InputSelect @bind-Value="Model.ReferenceLocation" class="form-control">
+                        @foreach (var item in Model.SelectLocation)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="(() => Model.ReferenceLocation)" />
+                </FormFieldset>
+
+                <FormFieldset>
+                    <label>Reference Value Position</label>
+                    <InputSelect @bind-Value="Model.ReferencePosition" class="form-control">
+                        @foreach (var item in Model.SelectPosition)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="(() => Model.ReferencePosition)" />
+                </FormFieldset>
+            </Row>
+            @*END: Reference Values Row*@
+
+            <hr style="border-width: thick;" />
+
+            @*BEGIN: 2nd Search Values Row*@
+            <Row>
+                <FormFieldset HasTopSmMargin="false">
+                    <label>2nd Search Value</label>
+                    <InputNumber @bind-Value="Model.Value2" class="form-control" placeholder="Enter 2nd Search Value" />
+                    <ValidationMessage For="(() => Model.Value2)" style="color: red;" />
+                </FormFieldset>
+
+                <FormFieldset>
+                    <label>Use Specified Week or Range of Weeks</label>
+                    <InputSelect @bind-Value="Model.ReferencePosition" class="form-control">
+                        @foreach (var item in Model.SelectPosition)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="(() => Model.ReferencePosition)" />
+                </FormFieldset>
+            </Row>
+            @*END: 2nd Search Values Row*@
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+
+    </div>
+
+</div>
+
+
+@code {
+    public SearchParameters Model { get; set; } = new SearchParameters();
+
+    InputNumber<int> _referenceValue;
+
+    void _ReferenceValueInputed()
+    {
+
+    }
+
+    int[] _SelectNoOfWeeksToDisplay;
+    protected override void OnInitialized()
+    {
+        Model.GamesList = Service.GetGames();
+        Model.GamesList.Insert(0, new GamesProcess.Models.Game { ID = 0, Name = "Select Groups" });
+        Model.GamesGroups = Service.GetGameGroups();
+        Model.GamesGroups.Insert(0, new GamesProcess.Models.GamesClass { ID = 0, Name = "Select All" });
+
+        // Default Search Parameter Values
+        Model.NoOfSearchValues = 2;
+        Model.NoOfWeeksToDisplay = 5;
+        _SelectNoOfWeeksToDisplay = new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 30 };
+        base.OnInitialized();
+    }
+}

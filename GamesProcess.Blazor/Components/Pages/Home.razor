@@ -1,4 +1,32 @@
-﻿<h3>Home</h3>
+﻿@page "/"
+@page "/home"
+
+<BodyTopBar PageTitle="Welcome" RouteTitle="Home" RouteLink="/Home" />
+
+<Row>
+    <HeaderTile>
+        Games Process
+    </HeaderTile>
+</Row>
+
+
+<Row>
+    <LinkTiles TileLink="/Search" ColorClass="success" H2TileTitle="Search" H6TileTitle="Simple Search" ZmdiIconClass="zmdi-search-for">
+        Use Different Search to Search for Events
+    </LinkTiles>
+
+    <LinkTiles TileLink="/Search/Advanced" ColorClass="info" H2TileTitle="Advanced Search" H6TileTitle="Advanced Search" ZmdiIconClass="zmdi-search-in-file">
+        Use Advanced Search for One or Multiple Events
+    </LinkTiles>
+
+    <LinkTiles TileLink="/Games" ColorClass="danger" H2TileTitle="Games" H6TileTitle="Games List" ZmdiIconClass="zmdi-gamepad">
+        See List of Games
+    </LinkTiles>
+
+    <LinkTiles TileLink="/Groups" ColorClass="danger" H2TileTitle="Groups" H6TileTitle="Groups List" ZmdiIconClass="zmdi-group">
+        See List of Games Groups
+    </LinkTiles>
+</Row>
 
 @code {
 

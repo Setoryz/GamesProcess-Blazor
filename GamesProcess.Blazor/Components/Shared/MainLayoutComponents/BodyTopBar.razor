@@ -1,0 +1,43 @@
+﻿@using System.Globalization
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="page-title-box">
+            <h4 class="page-title float-left">@ToUpper(PageTitle)</h4>
+
+            <ol class="breadcrumb float-right">
+                <li class="breadcrumb-item">
+                    <a href="@HomeLink">@ToUpper(HomeTitle)</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@RouteLink">@ToUpper(RouteTitle)</a>
+                </li>
+                <li class="breadcrumb-item active">@ToUpper(PageTitle)</li>
+            </ol>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string ToUpper(string text)
+    {
+        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+        return textInfo.ToTitleCase(text);
+    }
+
+    [Parameter]
+    public string PageTitle { get; set; }
+
+    [Parameter]
+    public string RouteTitle { get; set; }
+    [Parameter]
+    public string RouteLink { get; set; }
+
+    [Parameter]
+    public string HomeTitle { get; set; } = "Games Process";
+    [Parameter]
+    public string HomeLink { get; set; } = "/";
+
+}

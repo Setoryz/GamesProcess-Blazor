@@ -1,0 +1,99 @@
+﻿@page "/Events"
+@page "/Events/Home"
+@page "/Events/Index"
+@using GamesProcess.Models
+@using GamesProcess.Blazor.Components.Shared.EventsComponents
+@inherits OwningComponentBase<GamesProcess.Data.Services.EventDbService>
+
+<BodyTopBar PageTitle="All Events" RouteTitle="Events" RouteLink="/Events" />
+
+<Row>
+    <HeaderTile>
+        All Events
+    </HeaderTile>
+</Row>
+
+<Row>
+    <BodyTile>
+
+        <a class="btn btn-outline-primary float-right ml-2" href="/Events/Add">Add New Event</a>
+
+        <form asp-action="Index" method="get">
+            <span class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3">
+                <label class="form-control-sm">Find by Single Number: </label>
+                <input class="form-control-sm" type="text" name="SearchString" value="@SearchFilter" />
+                <input type="submit" class="btn btn-primary ml-2" value="Search" />
+
+                <a class="btn btn-outline-primary float-right" href="/Events">Back to Full List</a>
+            </span>
+        </form>
+    </BodyTile>
+</Row>
+
+<Row>
+    <BodyTile>
+        <div class="mb-3">
+            <span>
+                <span class="btn">Maximum Amount of Values to Display: </span>
+                <input class="form-control-sm" type="number" min="0" max="50" name="SearchString" @bind="@AmountToDisplay" />
+            </span>
+
+            <div class="float-md-right">
+                <span class="btn text-center">
+                    Page <span class="text-info">@CurrentPage</span> of <span class="text-info">@lastPage</span>
+                </span>
+                <button class="btn @((CurrentPage == 1) ? "" : "btn-outline-primary")" @onclick="PreviousPage" disabled="@(CurrentPage == 1)">Previous</button>
+                <button class="btn @((CurrentPage == lastPage) ? "" : "btn-outline-primary") ml-2" disabled="@(CurrentPage == lastPage)" @onclick="NextPage">Next</button>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Event Number</th>
+                    <th colspan="5">Winning</th>
+                    <th colspan="5">Machine</th>
+                    <th>Game</th>
+                    <th>Game Group</th>
+                </tr>
+            </thead>
+
+            <EventsTBody Events="((_events == null) ? null : _events.Skip(CurrentSkip).Take(AmountToDisplay).ToList())" />
+
+        </table>
+
+
+    </BodyTile>
+</Row>
+
+
+@code {
+    public void PreviousPage()
+    {
+        CurrentPage = (CurrentPage > 1) ? CurrentPage - 1 : CurrentPage;
+        CurrentSkip = (CurrentPage - 1) * AmountToDisplay;
+        this.StateHasChanged();
+    }
+    public void NextPage()
+    {
+        CurrentPage++;
+        CurrentSkip = (CurrentPage - 1) * AmountToDisplay;
+        this.StateHasChanged();
+    }
+    int CurrentPage;
+    int CurrentSkip;
+    int SearchFilter = 1;
+    int AmountToDisplay;
+    int lastPage => (_eventsCount % AmountToDisplay == 0) ? (_eventsCount / AmountToDisplay) : (_eventsCount / AmountToDisplay) + 1;
+
+    List<Event> _events = null;
+    int _eventsCount;
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentPage = 1;
+        CurrentSkip = 0;
+        AmountToDisplay = 50;
+        _events = await Service.GetEventsAsync();
+        _eventsCount = _events.Count();
+    }
+}

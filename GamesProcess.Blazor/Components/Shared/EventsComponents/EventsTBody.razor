@@ -1,0 +1,43 @@
+﻿@inherits OwningComponentBase<GamesProcess.Data.Services.EventDbService>
+
+<tbody>
+    @if (Events == null)
+    {
+        <tr>
+            <td colspan="13" class="align-self-lg-center"><span class="text-info text-lg-center">...Loading...</span></td>
+        </tr>
+    }
+    else
+    {
+        @foreach (var item in Events)
+        {
+            <tr>
+                <td>@item.EventNumber</td>
+                @for (int i = 0; i < item.Winning.Length; i++)
+                {
+                    <td>@item.Winning[i]</td>
+                }
+                @for (int i = 0; i < item.Machine.Length; i++)
+                {
+                    <td>@item.Machine[i]</td>
+                }
+                <td>@_Games.Where(s => s.ID == item.GameID).First().Name.ToString()</td>
+                <td>@_GamesGroups.Skip((_Games.Skip(item.GameID - 1).First().GamesClassID) - 1).First().Name.ToString()</td>
+            </tr>
+        }
+    }
+</tbody>
+
+@code {
+    [Parameter]
+    public List<GamesProcess.Models.Event> Events { get; set; }
+
+    private List<GamesProcess.Models.Game> _Games;
+    private List<GamesProcess.Models.GamesClass> _GamesGroups;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _Games = await Service.GetGamesAsync();
+        _GamesGroups = await Service.GetGameGroupsAsync();
+    }
+}

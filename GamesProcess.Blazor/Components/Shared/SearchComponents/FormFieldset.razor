@@ -1,0 +1,15 @@
+﻿<div class="@(HasTopSmMargin ? "col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3 m-t-sm-40" : "col-lg-6 col-sm-12 col-xs-12 col-md-6 col-xl-3")" @attributes="AdditionalAttributes">
+    <fieldset class="form-group">
+        @ChildContent
+    </fieldset>
+</div>
+@code {
+    [Parameter]
+    public bool HasTopSmMargin { get; set; } = true;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalAttributes { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

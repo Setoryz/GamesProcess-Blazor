@@ -1,0 +1,40 @@
+﻿@using GamesProcess.Models
+@inherits OwningComponentBase<GamesProcess.Data.Services.TodoDbService>
+
+<div class="timeline-2">
+    @if (_todoItems == null)
+    {
+        <div class="time-item">
+            <div class="item-info">
+                <small class="text-muted">Loading...</small>
+                <p>
+                    <strong>Loading...</strong>
+                </p>
+            </div>
+        </div>
+    }
+    else
+    {
+        @foreach (var item in _todoItems)
+        {
+            <div class="time-item">
+                <div class="item-info">
+                    <small class="text-muted">@item.TimeAdded.ToLocalTime()</small>
+                    <p>
+                        <strong class="text-info">@item.Title</strong>
+                    </p>
+                    <p><em>"@item.Details"</em></p>
+                </div>
+            </div>
+        }
+    }
+    
+</div>
+
+@code {
+    List<TodoItem> _todoItems = null;
+    protected override async Task OnInitializedAsync()
+    {
+        _todoItems = await Service.GetTodoItemsAsync();
+    }
+}

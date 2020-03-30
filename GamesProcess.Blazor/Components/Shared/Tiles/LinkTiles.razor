@@ -1,0 +1,30 @@
+﻿<div class="col-xs-12 col-md-6 col-lg-6 col-xl-3">
+    <a href="@TileLink">
+        <div class="card-box tilebox-one">
+            <i class="@IconClass text-@ColorClass float-right text-muted"></i>
+            <h6 class="text-@ColorClass text-uppercase m-b-20">@H6TileTitle</h6>
+            <h2 class="m-b-20 text-@ColorClass">@H2TileTitle <i class="zmdi @ZmdiIconClass"></i></h2>
+            <span class="label label-@ColorClass"> 
+             @ChildContent
+            </span>
+        </div>
+    </a>
+</div>
+
+@code {
+    [Parameter]
+    public string TileLink { get; set; }
+    [Parameter]
+    public string ColorClass { get; set; }
+    [Parameter]
+    public string H2TileTitle { get; set; }
+    [Parameter]
+    public string H6TileTitle { get; set; }
+    [Parameter]
+    public string ZmdiIconClass { get; set; }
+    [Parameter]
+    public string IconClass { get; set; } = "icon-arrow-right-circle";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

@@ -1,0 +1,85 @@
+﻿@using GamesProcess.Blazor.Components.Shared.MainLayoutComponents.RightSideBarComponents
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+<!-- Right Sidebar -->
+<div class="side-bar right-bar">
+    <div class="nicescroll">
+        <ul class="nav nav-pills nav-justified text-xs-center">
+            <li class="nav-item">
+                <a href="#home-2" class="nav-link active" data-toggle="tab" aria-expanded="false">
+                    To Do
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#messages-2" class="nav-link" data-toggle="tab" aria-expanded="true">
+                    Settings
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="home-2">
+                <TodoList />
+            </div>
+
+            <div class="tab-pane fade" id="messages-2">
+
+                <div class="row m-t-10">
+                    <div class="col-8">
+                        <h5 class="m-0">Notifications</h5>
+                        <p class="text-muted m-b-0"><small>Do you need them?</small></p>
+                    </div>
+                    <div class="col-4 text-right">
+                        <input type="checkbox" checked data-plugin="switchery" data-color="#1bb99a" data-size="small"/>
+                    </div>
+                </div>
+
+                <div class="row m-t-10">
+                    <div class="col-8">
+                        <h5 class="m-0">Save Results</h5>
+                        <p class="m-b-0 text-muted"><small>Enable/Disable access</small></p>
+                    </div>
+                    <div class="col-4 text-right">
+                        <input type="checkbox" checked data-plugin="switchery" data-color="#1bb99a" data-size="small" />
+                    </div>
+                </div>
+
+                <div class="row m-t-10">
+                    <div class="col-8">
+                        <h5 class="m-0">Search History</h5>
+                        <p class="m-b-0 text-muted"><small>See Previous Searches</small></p>
+                    </div>
+                    <div class="col-4 text-right">
+                        <input type="checkbox" checked data-plugin="switchery" data-color="#1bb99a" data-size="small" />
+                    </div>
+                </div>
+
+                <div class="row m-t-10">
+                    <div class="col-8">
+                        <h5 class="m-0">Download Results</h5>
+                        <p class="m-b-0 text-muted"><small>Bownload Previous Results</small></p>
+                    </div>
+                    <div class="col-4 text-right">
+                        <input type="checkbox" checked data-plugin="switchery" data-color="#1bb99a" data-size="small" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- end nicescroll -->
+</div>
+<!-- /Right-bar -->
+
+@code{
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+
+    //        await JSRuntime.InvokeVoidAsync("getDocumentReady", "The document . ready function was executed");
+    //    }
+    //}
+
+}

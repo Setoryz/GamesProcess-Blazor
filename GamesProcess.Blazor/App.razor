@@ -6,8 +6,11 @@
     </Found>
     <NotFound>
         <LayoutView Layout="@typeof(MainLayout)">
-            <h1>Page not found</h1>
-            <p>Sorry, but there's nothing here!</p>
+            <BodyTopBar PageTitle="Page Not Found" RouteLink="/404" RouteTitle="Error" />
+            <HeaderTile>
+                Error 404: Page not found
+            </HeaderTile>
+            <p>The Page you requested isn't available!</p>
         </LayoutView>
     </NotFound>
 </Router>
