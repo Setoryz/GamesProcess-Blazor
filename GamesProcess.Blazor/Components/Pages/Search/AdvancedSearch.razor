@@ -1,13 +1,34 @@
-﻿@page "/Search/Advanced"
+﻿@using GamesProcess.Models.ViewModels
+@inherits OwningComponentBase<GamesProcess.Data.Services.ApplicationDbService>
+
+@page "/Search/Advanced"
 @page "/Search/AdvancedSearch"
 
 <BodyTopBar PageTitle="Advanced Search" RouteLink="/Search" RouteTitle="Search" />
 
 <Row>
-    <AdvancedSearchParametersTile />
+    <AdvancedSearchParametersTile @ref="searchParametersTile" Model="_SearchResultViewModel.SearchParameters" />
 </Row>
 
 
 @code {
+    private SearchResultViewModel _SearchResultViewModel { get; set; } = new SearchResultViewModel();
 
+    private AdvancedSearchParametersTile searchParametersTile;
+
+    private bool _showSearchParameterTiles;
+
+    private async Task ShowResults()
+    {
+        _SearchResultViewModel.SearchParameters = searchParametersTile.Model;
+        _SearchResultViewModel.SearchResults = new List<AdvancedSearchResult>();
+
+        _SearchResultViewModel.SearchResults = await Service.GetAdvancedSearchResultsAsync(_SearchResultViewModel.SearchParameters);
+    }
+
+    protected override void OnInitialized()
+    {
+        _SearchResultViewModel.SearchParameters = new SearchParameters();
+        base.OnInitialized();
+    }
 }

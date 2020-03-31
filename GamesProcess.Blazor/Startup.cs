@@ -33,7 +33,7 @@ namespace GamesProcess.Blazor
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddScoped<EventDbService>();
+            services.AddScoped<ApplicationDbService>();
             services.AddScoped<TodoDbService>();
         }
 
