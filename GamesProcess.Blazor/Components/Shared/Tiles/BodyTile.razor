@@ -1,5 +1,5 @@
 ﻿<div class="col-xs-12 col-md-12 col-lg-12 col-xl-12">
-    <div class="card-box tilebox-one">
+    <div class="card-box @AdditionalCss">
         @ChildContent
     </div>
 </div>
@@ -7,4 +7,7 @@
 @code {
     [Parameter]
     public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string AdditionalCss { get; set; }
 }

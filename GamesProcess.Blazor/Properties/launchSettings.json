@@ -2,8 +2,12 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/GamesProcess.Blazor",
+      "sslPort": 0
+    },
     "iisExpress": {
-      "applicationUrl": "http://localhost:61944",
+      "applicationUrl": "http://localhost:61743",
       "sslPort": 44362
     }
   },
@@ -13,10 +17,11 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "ancmHostingModel": "InProcess"
     },
     "GamesProcess.Blazor": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

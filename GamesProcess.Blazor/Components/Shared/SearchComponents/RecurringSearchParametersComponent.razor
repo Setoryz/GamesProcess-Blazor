@@ -1,0 +1,132 @@
+﻿@using GamesProcess.Models
+@inherits OwningComponentBase<GamesProcess.Data.Services.ApplicationDbService>
+
+<h4 class="header-title m-t-0 m-b-30">
+    Enter Search Parameters
+</h4>
+
+<EditForm EditContext="_editContext" @onreset="Reset" OnValidSubmit="OnValidSubmitCallBack">
+    <DataAnnotationsValidator />
+
+    @*BEGIN: Search Modifier Row*@
+    <Row>
+        <FormFieldset>
+            <label>Number of Weeks to Display</label>
+            <InputSelect @bind-Value="_NoOfWeeksToDisplay" class="form-control">
+                @foreach (var item in _SelectNoOfWeeksToDisplay)
+                {
+                    <option value="@item">@item</option>
+                }
+            </InputSelect>
+            <small class="text-muted">Number of weeks that will be displayed before & after the 1st ref value in the results</small>
+        </FormFieldset>
+
+        <FormFieldset>
+            <label>Group Selection</label>
+            <InputSelect @bind-Value="_GroupSelection" @oninput="_GroupSelectionInput" class="form-control">
+                @foreach (var item in Model.GamesGroups)
+                {
+                    <option value="@item.ID">@item.Name</option>
+                }
+            </InputSelect>
+            <small class="text-muted">The option of Game Selection will load based on what you select here. </small>
+        </FormFieldset>
+
+        @if (Model.GroupSelection != 0)
+        {
+            <FormFieldset>
+                <label>Game Selection</label>
+                <InputSelect @bind-Value="_GameSelection" class="form-control">
+                    @foreach (var item in Model.GamesList.Where(s => s.GamesClassID == Model.GroupSelection || s.GamesClassID == 0))
+                        {
+                        <option value="@item.ID">@( item.ID != 0 ? item.Name : $"Search all games in {Model.GamesGroups.Where(s => s.ID == Model.GroupSelection).First().Name}")</option>
+                        }
+                    /**/
+                </InputSelect>
+                <small class="text-muted"> This is the type of game where the search will be performed </small>
+            </FormFieldset>
+        }
+    </Row>
+
+    @*BEGIN: Reference Values Row*@
+    <hr style="border-width: thick;" />
+    <Row>
+        @*<FormFieldset HasTopSmMargin="false">
+            <label>Recurring Value</label>
+            <InputNumber @bind-Value="Model.RecurringValue" class="form-control" placeholder="Enter Total Value" />
+            <ValidationMessage For="(() => Model.RecurringValue)" style="color: red;" />
+        </FormFieldset>*@
+
+        <FormFieldset>
+            <label>Recurring type</label>
+            <InputSelect @bind-Value="_RecurringType" class="form-control">
+                @foreach (var item in Model.SelectRecurringValueType)
+                {
+                    <option value="@item.ID">@item.Name</option>
+                }
+            </InputSelect>
+        </FormFieldset>
+
+        <FormFieldset>
+            <label>Where to Search Recurring Value</label>
+            <InputSelect @bind-Value="_RecurringValueLocation" class="form-control">
+                @foreach (var item in Model.SelectLocation)
+                {
+                    <option value="@item.ID">@item.Name</option>
+                }
+            </InputSelect>
+        </FormFieldset>
+    </Row>
+    @*END: Reference Values Row*@
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    @*END: Search Modifier Row*@
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public RecurringSearchParameters Model { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmitCallBack { get; set; }
+
+    void Reset(EventArgs eventArgs)
+    {
+        Model.Reset();
+        this.StateHasChanged();
+    }
+
+    private EditContext _editContext;
+
+    #region InputSelectOptionsSearchParameters
+    // Search Modifiers
+    private string _NoOfWeeksToDisplay { get => Model.NoOfWeeksToDisplay.ToString(); set => Model.NoOfWeeksToDisplay = int.Parse(value); }
+    private string _GameSelection { get => Model.GameSelection.ToString(); set => Model.GameSelection = int.Parse(value); }
+    private string _GroupSelection { get => Model.GroupSelection.ToString(); set => Model.GroupSelection = int.Parse(value); }
+    // Total Values
+    private string _RecurringType { get => Model.RecurringType.ToString(); set => Model.RecurringType = int.Parse(value); }
+    private string _RecurringValueLocation { get => Model.RecurringValueLocation.ToString(); set => Model.RecurringValueLocation = int.Parse(value); }
+    #endregion
+
+    void _GroupSelectionInput()
+    {
+        Model.GameSelection = 0;
+    }
+
+
+    int[] _SelectNoOfWeeksToDisplay;
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(Model);
+        Model.GamesList = Service.GetGames();
+        Model.GamesList.Insert(0, new GamesProcess.Models.Game { ID = 0, Name = "Search All Games in Group" });
+        Model.GamesGroups = Service.GetGameGroups();
+        Model.GamesGroups.Insert(0, new GamesProcess.Models.GamesClass { ID = 0, Name = "Search All Groups & Games" });
+
+        // Default Search Parameter Values
+        _SelectNoOfWeeksToDisplay = new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 30 };
+        base.OnInitialized();
+    }
+}

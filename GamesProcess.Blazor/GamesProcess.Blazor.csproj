@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <StartupObject>GamesProcess.Blazor.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

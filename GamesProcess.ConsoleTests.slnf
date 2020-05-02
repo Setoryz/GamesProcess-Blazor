@@ -1,0 +1,8 @@
+{
+  "solution": {
+    "path": "GamesProcess.sln",
+    "projects": [
+      "ConsoleTests\\ConsoleTests.csproj"
+    ]
+  }
+}

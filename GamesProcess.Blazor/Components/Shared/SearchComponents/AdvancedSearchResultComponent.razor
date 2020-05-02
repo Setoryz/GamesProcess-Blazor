@@ -1,0 +1,155 @@
+﻿@using GamesProcess.Models
+@using GamesProcess.Models.ViewModels
+
+@if (AdvancedSearchResults.Count == 0)
+{
+    <h4 class="col-12 text-info" style="align-content: center">The Search returned no results, Try Searching for Something else</h4>
+}
+else
+{
+    <div class="mb-3">
+        <span>
+            <span class="btn">Maximum Amount of Results to Display: </span>
+            <input class="form-control-sm" type="number" min="0" max="50" name="SearchString" @bind="@_amountToDisplay" @oninput="_AmountToDisplayModified" />
+        </span>
+
+        <div class="float-md-right">
+            <span class="btn text-center">
+                Page <span class="text-info">@_currentPage</span> of <span class="text-info">@_lastPage</span>
+            </span>
+            <button class="btn @((_currentPage == 1) ? "" : "btn-outline-primary")" @onclick="PreviousPage" disabled="@(_currentPage == 1)">Previous</button>
+            <button class="btn @((_currentPage == _lastPage) ? "" : "btn-outline-primary") ml-2" disabled="@(_currentPage == _lastPage)" @onclick="NextPage">Next</button>
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr class="table-active">
+                <th>Result ID</th>
+                <th>Event DB ID</th>
+                <th>Date</th>
+                <th>Event Number</th>
+
+                <th>W1</th>
+                <th>W2</th>
+                <th>W3</th>
+                <th>W4</th>
+                <th>W5</th>
+                <th style="width:2px;"></th>
+                <th>M1</th>
+                <th>M2</th>
+                <th>M3</th>
+                <th>M4</th>
+                <th>M5</th>
+                <th>Game Name</th>
+                <th>Game Group</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var searchResult in
+                 AdvancedSearchResults.Skip(_currentSkip).Take(_amountToDisplay))
+            {
+                @foreach (var eventResult in searchResult.Events)
+                {
+                    bool isRefWeek = (eventResult.EventID == searchResult.ReferenceEventID);
+                    bool isVal2Week = (eventResult.EventID == searchResult.Value2EventID);
+                    bool isVal3Week = (eventResult.EventID == searchResult.Value3EventID);
+
+                    var signifyRefWeek = (isRefWeek) ? " R" : "";
+                    var higlightRefWeek = (isRefWeek) ? "background-color:green; font-weight:bolder; color:aliceblue" : "";
+                    var higlightOtherValWeek = (isVal2Week || isVal3Week) ? "background-color:dodgerblue; color:aliceblue" : "";
+
+                    <tr class="" style="@higlightOtherValWeek @higlightRefWeek">
+                        <td>@(searchResult.ID + 1) @signifyRefWeek</td>
+                        <td>@eventResult.EventID</td>
+                        <td>@eventResult.Date</td>
+                        <td>@eventResult.EventNumber</td>
+
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            var highlightRefVal = (isRefWeek && eventResult.Winning[i] == SearchParameters.ReferenceValue) ? "background-color:yellow; color:green;" : "";
+                            var highlight2ndVal = (isVal2Week && eventResult.Winning[i] == SearchParameters.Value2) ? "background-color:yellow; color:dodgerblue;" : "";
+                            var highlight3rdVal = (isVal3Week && eventResult.Winning[i] == SearchParameters.Value3) ? "background-color:yellow; color:dodgerblue;" : "";
+
+                            <td class="" style="@highlightRefVal @highlight2ndVal @highlight3rdVal">@eventResult.Winning[i]</td>
+                        }
+                        <td style="background-color: #fff; border:hidden; width:2px;"></td>
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            var highlight2ndVal = (isVal2Week && eventResult.Machine[i] == SearchParameters.Value2) ? "background-color:yellow; color:dodgerblue;" : "";
+                            var highlight3rdVal = (isVal3Week && eventResult.Machine[i] == SearchParameters.Value3) ? "background-color:yellow; color:dodgerblue;" : "";
+                            var highlightRefVal = (isRefWeek && eventResult.Machine[i] == SearchParameters.ReferenceValue) ? "background-color:yellow; color:green;" : "";
+
+                            <td class="" style="@highlightRefVal @highlight2ndVal @highlight3rdVal">@eventResult.Machine[i]</td>
+                        }
+
+                        <td>
+                            @SearchParameters.GamesList.Skip(eventResult.GameID).First().Name.ToString()
+                        </td>
+
+                        <td>
+                            @SearchParameters.GamesGroups.Skip((SearchParameters.GamesList.Skip(eventResult.GameID).First().GamesClassID)).First().Name.ToString()
+                        </td>
+                    </tr>
+                }
+                <tr style="background-color: grey"><td colspan="17"></td></tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mb-3">
+        <span>
+            <span class="btn">Maximum Amount of Results to Display: </span>
+            <input class="form-control-sm" type="number" min="0" max="50" name="SearchString" @bind="@_amountToDisplay" @oninput="_AmountToDisplayModified" />
+        </span>
+
+        <div class="float-md-right">
+            <span class="btn text-center">
+                Page <span class="text-info">@_currentPage</span> of <span class="text-info">@_lastPage</span>
+            </span>
+            <button class="btn @((_currentPage == 1) ? "" : "btn-outline-primary")" @onclick="PreviousPage" disabled="@(_currentPage == 1)">Previous</button>
+            <button class="btn @((_currentPage == _lastPage) ? "" : "btn-outline-primary") ml-2" disabled="@(_currentPage == _lastPage)" @onclick="NextPage">Next</button>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public List<AdvancedSearchResult> AdvancedSearchResults { get; set; }
+    [Parameter]
+    public AdvancedSearchParameters SearchParameters { get; set; }
+
+    #region Pagination
+    int _resultCount => AdvancedSearchResults.Count();
+    int _currentPage = 1;
+    int _currentSkip = 0;
+    int _amountToDisplay = 5;
+    int _lastPage => (_resultCount % _amountToDisplay == 0)
+                        ? (_resultCount / _amountToDisplay)
+                        : (_resultCount / _amountToDisplay) + 1;
+    void PreviousPage()
+    {
+        _currentPage = (_currentPage > 1) ? _currentPage - 1 : _currentPage;
+        _currentSkip = (_currentPage - 1) * _amountToDisplay;
+        this.StateHasChanged();
+    }
+    void NextPage()
+    {
+        _currentPage++;
+        _currentSkip = (_currentPage - 1) * _amountToDisplay;
+        this.StateHasChanged();
+    }
+    void _AmountToDisplayModified()
+    {
+        this.StateHasChanged();
+    }
+    #endregion
+
+    protected override void OnInitialized()
+    {
+
+        base.OnInitialized();
+    }
+}

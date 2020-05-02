@@ -1,34 +1,81 @@
-﻿@using GamesProcess.Models.ViewModels
+﻿@using GamesProcess.Models
+@using GamesProcess.Models.ViewModels
+@using GamesProcess.Blazor.Components.Shared.SearchComponents
 @inherits OwningComponentBase<GamesProcess.Data.Services.ApplicationDbService>
-
 @page "/Search/Advanced"
 @page "/Search/AdvancedSearch"
 
+<PageTitle Title="Advanced Search" />
 <BodyTopBar PageTitle="Advanced Search" RouteLink="/Search" RouteTitle="Search" />
 
+@if (!_resultLoading)
+{
+    <Row>
+        <BodyTile>
+            <div class="col-sm-10">
+                <input type="checkbox" style="align-self: center; vertical-align: middle;" @bind="_hideSearchParameterTiles">
+                <label>@(_hideSearchParameterTiles ? "Show" : "Hide") Search Parameters</label>
+            </div>
+        </BodyTile>
+    </Row>
+}
+@if (!_hideSearchParameterTiles)
+{
+    <Row>
+        <BodyTile>
+            <AdvancedSearchParametersComponent @ref="searchParametersComponent" Model="@_SearchResultViewModel.SearchParameters" OnValidSubmitCallBack="@ShowResultsAsync" />
+        </BodyTile>
+    </Row>
+}
+
 <Row>
-    <AdvancedSearchParametersTile @ref="searchParametersTile" Model="_SearchResultViewModel.SearchParameters" />
+    @if (_SearchResultViewModel.SearchResults != null)
+    {
+        <BodyTile AdditionalCss="table-responsive">
+            @if (_resultLoading)
+            {
+                <h4 class="m-t-0 header-title text-info"><b>Search Results Loading...</b></h4>
+            }
+            else
+            {
+                <h4 class="m-t-0 header-title"><b>Search Results</b></h4>
+                <p class="text-muted font-13 m-b-30">
+                    These are the search results from the data you inputed.
+                </p>
+
+                <AdvancedSearchResultComponent AdvancedSearchResults="_SearchResultViewModel.SearchResults" SearchParameters="_SearchResultViewModel.SearchParameters" />
+            }
+        </BodyTile>
+    }
 </Row>
 
-
 @code {
-    private SearchResultViewModel _SearchResultViewModel { get; set; } = new SearchResultViewModel();
+    private AdvancedSearchResultViewModel _SearchResultViewModel { get; set; } = new AdvancedSearchResultViewModel() { SearchResults = null };
 
-    private AdvancedSearchParametersTile searchParametersTile;
+    private AdvancedSearchParametersComponent searchParametersComponent;
 
-    private bool _showSearchParameterTiles;
+    private bool _hideSearchParameterTiles { get; set; } = false;
+    private bool _resultLoading = true;
 
-    private async Task ShowResults()
+    private async Task ShowResultsAsync()
     {
-        _SearchResultViewModel.SearchParameters = searchParametersTile.Model;
         _SearchResultViewModel.SearchResults = new List<AdvancedSearchResult>();
+        _resultLoading = true;
+        _hideSearchParameterTiles = true;
+        this.StateHasChanged();
 
+        _SearchResultViewModel.SearchParameters = searchParametersComponent.Model;
         _SearchResultViewModel.SearchResults = await Service.GetAdvancedSearchResultsAsync(_SearchResultViewModel.SearchParameters);
+        _resultLoading = false;
+        this.StateHasChanged();
+
+        _SearchResultViewModel.SearchParameters.TimeSearched = DateTime.Now;
+        await Service.SaveAdvancedSearchParameters(_SearchResultViewModel.SearchParameters);
     }
 
     protected override void OnInitialized()
     {
-        _SearchResultViewModel.SearchParameters = new SearchParameters();
+        _SearchResultViewModel.SearchParameters = new AdvancedSearchParameters();
         base.OnInitialized();
     }
 }

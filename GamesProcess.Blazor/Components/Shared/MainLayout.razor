@@ -20,3 +20,10 @@
 <footer class="footer text-right">
     &copy;@DateTime.Now setoryz@gmail.com.
 </footer>
+
+@code{
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
+}

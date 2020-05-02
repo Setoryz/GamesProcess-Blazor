@@ -1,0 +1,86 @@
+﻿@using GamesProcess.Models
+@using GamesProcess.Models.ViewModels
+@using GamesProcess.Blazor.Components.Shared.SearchComponents
+@inherits OwningComponentBase<GamesProcess.Data.Services.ApplicationDbService>
+@page "/Search/Recurring"
+@page "/Search/RecurringSearch"
+
+<PageTitle Title="Recurring Search" />
+<BodyTopBar PageTitle="Recurring Search" RouteLink="/Search" RouteTitle="Search" />
+
+@if (!_resultLoading)
+{
+    <Row>
+        <BodyTile>
+            <div class="col-sm-10">
+                <input type="checkbox" style="align-self: center; vertical-align: middle;" @bind="_hideSearchParameterTiles">
+                <label>@(_hideSearchParameterTiles ? "Show" : "Hide") Search Parameters</label>
+            </div>
+        </BodyTile>
+    </Row>
+}
+
+@if (!_hideSearchParameterTiles)
+{
+    <Row>
+        <BodyTile>
+            <RecurringSearchParametersComponent @ref="searchParametersComponent" Model="@_SearchResultViewModel.SearchParameters" OnValidSubmitCallBack="@ShowResultsAsync" />
+        </BodyTile>
+    </Row>
+}
+
+@if (_SearchResultViewModel.SearchResults != null)
+{
+    <Row>
+        <BodyTile AdditionalCss="table-responsive">
+            @if (_resultLoading)
+            {
+                <h4 class="m-t-0 header-title text-info"><b>Search Results Loading...</b></h4>
+            }
+            else
+            {
+                <h4 class="m-t-0 header-title"><b>Search Results</b></h4>
+                <p class="text-muted font-13 m-b-30">
+                    These are the search results from the data you inputed.
+                </p>
+
+                <RecurringSearchResultComponent RecurringSearchResults="_SearchResultViewModel.SearchResults" SearchParameters="_SearchResultViewModel.SearchParameters" />
+            }
+        </BodyTile>
+    </Row>
+}
+
+
+
+@code{
+    private RecurringSearchResultViewModel _SearchResultViewModel { get; set; } = new RecurringSearchResultViewModel() { SearchResults = null };
+
+    private RecurringSearchParametersComponent searchParametersComponent;
+
+    private bool _hideSearchParameterTiles = false;
+    private bool _resultLoading = true;
+
+    private async Task ShowResultsAsync()
+    {
+        _SearchResultViewModel.SearchResults = new List<RecurringSearchResult>();
+        _resultLoading = true;
+        _hideSearchParameterTiles = true;
+        this.StateHasChanged();
+
+        _SearchResultViewModel.SearchParameters = searchParametersComponent.Model;
+        for (int i = 1; i <= 90; i++)
+        {
+            _SearchResultViewModel.SearchParameters.RecurringValue = i;
+            _SearchResultViewModel.SearchResults.AddRange((await Service.GetRecurringSearchResultsAsync(_SearchResultViewModel.SearchParameters)));
+            _resultLoading = false;
+            this.StateHasChanged();
+        }
+        this.StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        _SearchResultViewModel.SearchParameters = new RecurringSearchParameters();
+        base.OnInitialized();
+    }
+}

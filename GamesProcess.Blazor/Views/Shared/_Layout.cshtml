@@ -107,9 +107,9 @@
                             <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-search-in-file"></i> <span> Search </span> <span class="menu-arrow"></span></a>
                             <ul class="list-unstyled">
                                 <li><a href="/Search">All Search</a></li>
-                                <li><a href="/Search">Total Search</a></li>
-                                <li><a href="/Search">Recurring Search</a></li>
-                                <li><a href="/Search">Turning Search</a></li>
+                                <li><a href="/Search/Total">Total Search</a></li>
+                                <li><a href="/Search/Recurring">Recurring Search</a></li>
+                                <li><a href="/Search/Turning">Turning Search</a></li>
                                 <li><a href="/Search/Advanced">Advanced Search</a></li>
                             </ul>
                         </li>
@@ -242,7 +242,25 @@
             $(document).ready();
             console.log(string);
         }
+        window.setTitle = (title) => {
+            console.log('Setting title', title);
+            document.title = title + ' - Games Process';
+        };
     </script>
+
+    @*<script>
+        window.setCustomAttribute = (element, attribute, value) => { element.SetAttribute(attribute) = value };
+        //window.getDocumentReady = (logMessage) => {
+        //    $(document).ready(() => console.log('', logMessage));
+        //    (window.jQuery);
+        //};
+        
+        window.jQueryWidgets = {
+            initialize: function () {
+                $("#resizable").resizeable();
+            }
+        }
+    </script>*@
 
     <!-- Blazor Script -->
     <script src="_framework/blazor.server.js"></script>

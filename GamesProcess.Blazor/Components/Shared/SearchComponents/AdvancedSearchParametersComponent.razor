@@ -1,0 +1,254 @@
+﻿@using GamesProcess.Models
+@inherits OwningComponentBase<GamesProcess.Data.Services.ApplicationDbService>
+
+
+<h4 class="header-title m-t-0 m-b-30">
+    Enter Search Parameters
+</h4>
+
+<EditForm EditContext="_editContext" @onreset="Reset" OnValidSubmit="OnValidSubmitCallBack">
+    <DataAnnotationsValidator />
+
+    @*BEGIN: Search Modifier Row*@
+    <Row>
+        <FormFieldset>
+            <label>Number of Search Values</label>
+            <InputSelect @bind-Value="_NoOfSearchValues" class="form-control">
+                @foreach (var item in Model.SelectNoOfSearchValues)
+                {
+                    <option value="@item">@item</option>
+                }
+            </InputSelect>
+            <small class="text-muted"> This is the number of reference values to be searched for in the db</small>
+        </FormFieldset>
+
+        <FormFieldset>
+            <label>Number of Weeks to Display</label>
+            <InputSelect @bind-Value="_NoOfWeeksToDisplay" class="form-control">
+                @foreach (var item in _SelectNoOfWeeksToDisplay)
+                {
+                    <option value="@item">@item</option>
+                }
+            </InputSelect>
+            <small class="text-muted">Number of weeks that will be displayed before & after the 1st ref value in the results</small>
+        </FormFieldset>
+
+
+        <FormFieldset>
+            <label>Group Selection</label>
+            <InputSelect @bind-Value="_GroupSelection" @oninput="_GroupSelectionInput" class="form-control">
+                @foreach (var item in Model.GamesGroups)
+                {
+                    <option value="@item.ID">@item.Name</option>
+                }
+            </InputSelect>
+            <small class="text-muted">The option of Game Selection will load based on what you select here. </small>
+        </FormFieldset>
+
+        @if (Model.GroupSelection != 0)
+        {
+            <FormFieldset>
+                <label>Game Selection</label>
+                <InputSelect @bind-Value="_GameSelection" class="form-control">
+                    @foreach (var item in Model.GamesList.Where(s => s.GamesClassID == Model.GroupSelection || s.GamesClassID == 0))
+                    {
+                        <option value="@item.ID">@( item.ID != 0 ? item.Name : $"Search all games in {Model.GamesGroups.Where(s => s.ID == Model.GroupSelection).First().Name}")</option>
+                    }
+                </InputSelect>
+                <small class="text-muted"> This is the type of game where the search will be performed </small>
+            </FormFieldset>
+        }
+    </Row>
+    @*END: Search Modifier Row*@
+
+    @*BEGIN: Reference Values Row*@
+    <hr style="border-width: thick;" />
+    <Row>
+        <FormFieldset HasTopSmMargin="false">
+            <label>Reference Value</label>
+            <InputNumber @bind-Value="Model.ReferenceValue" class="form-control" placeholder="Enter Reference Value" />
+            <ValidationMessage For="(() => Model.ReferenceValue)" style="color: red;" />
+        </FormFieldset>
+
+        <FormFieldset>
+            <label>Where to Search Reference Value</label>
+            <InputSelect @bind-Value="_ReferenceLocation" class="form-control">
+                @foreach (var item in Model.SelectLocation)
+                {
+                    <option value="@item.ID">@item.Name</option>
+                }
+            </InputSelect>
+        </FormFieldset>
+
+        <FormFieldset>
+            <label>Reference Value Position</label>
+            <InputSelect @bind-Value="_ReferencePosition" class="form-control">
+                @foreach (var item in Model.SelectPosition)
+                {
+                    <option value="@item.ID">@item.Name</option>
+                }
+            </InputSelect>
+        </FormFieldset>
+    </Row>
+    @*END: Reference Values Row*@
+
+    @*BEGIN: 2nd Search Values Row*@
+    @if (Model.NoOfSearchValues > 1)
+    {
+        <hr style="border-width: thick;" />
+        <Row>
+            <FormFieldset HasTopSmMargin="false">
+                <label>2nd Search Value</label>
+                <InputNumber @bind-Value="Model.Value2" class="form-control" placeholder="Enter 2nd Search Value" />
+                <ValidationMessage For="(() => Model.Value2)" style="color: red;" />
+            </FormFieldset>
+
+            <FormFieldset>
+                <label>Use Specified Week or Range of Weeks</label>
+                <InputSelect @bind-Value="_Value2WeekSelect" class="form-control">
+                    @foreach (var item in Model.SelectAltValWeekSel)
+                        {
+                        <option value="@item.ID">@item.Name</option>
+                        }
+                </InputSelect>
+            </FormFieldset>
+
+            <FormFieldset>
+                <label>@((Model.Value2WeekSelect == 1) ? "Weeks Apart" : "Weeks Range") for 2nd Search Value</label>
+                <InputNumber @bind-Value="Model.Value2Week" class="form-control" placeholder="@((Model.Value2WeekSelect==1) ? "Enter Weeks Apart" : "Enter Range of Weeks")" />
+                <ValidationMessage For="(() => Model.Value2Week)" style="color: red;" />
+            </FormFieldset>
+
+            <FormFieldset>
+                <label>Where to Search</label>
+                <InputSelect @bind-Value="_Value2Location" class="form-control">
+                    @foreach (var item in Model.SelectLocation)
+                        {
+                        <option value="@item.ID">@item.Name</option>
+                        }
+                </InputSelect>
+            </FormFieldset>
+
+            <FormFieldset>
+                <label>Second Value Position</label>
+                <InputSelect @bind-Value="_Value2Position" class="form-control">
+                    @foreach (var item in Model.SelectPosition)
+                        {
+                        <option value="@item.ID">@item.Name</option>
+                        }
+                </InputSelect>
+            </FormFieldset>
+        </Row>
+    }
+    @*END: 2nd Search Values Row*@
+
+    @*BEGIN: 3nd Search Values Row*@
+    @if (Model.NoOfSearchValues > 2)
+    {
+        <hr style="border-width: thick;" />
+        <Row>
+            <FormFieldset HasTopSmMargin="false">
+                <label>3rd Search Value</label>
+                <InputNumber @bind-Value="Model.Value3" class="form-control" placeholder="Enter 3rd Search Value" />
+                <ValidationMessage For="(() => Model.Value3)" style="color: red;" />
+            </FormFieldset>
+
+            <FormFieldset>
+                <label>Use Specified Week or Range of Weeks</label>
+                <InputSelect @bind-Value="_Value3WeekSelect" class="form-control">
+                    @foreach (var item in Model.SelectAltValWeekSel)
+                        {
+                        <option value="@item.ID">@item.Name</option>
+                        }
+                </InputSelect>
+            </FormFieldset>
+
+            <FormFieldset>
+                <label>Weeks Apart for 3rd Search Value</label>
+                <InputNumber @bind-Value="Model.Value3Week" class="form-control" placeholder="Enter Weeks Apart" />
+                <ValidationMessage For="(() => Model.Value3Week)" style="color: red;" />
+            </FormFieldset>
+
+            <FormFieldset>
+                <label>Where to Search</label>
+                <InputSelect @bind-Value="_Value3Location" class="form-control">
+                    @foreach (var item in Model.SelectLocation)
+                        {
+                        <option value="@item.ID">@item.Name</option>
+                        }
+                </InputSelect>
+            </FormFieldset>
+
+            <FormFieldset>
+                <label>Third Value Position</label>
+                <InputSelect @bind-Value="_Value3Position" class="form-control">
+                    @foreach (var item in Model.SelectPosition)
+                        {
+                        <option value="@item.ID">@item.Name</option>
+                        }
+                </InputSelect>
+            </FormFieldset>
+        </Row>
+    }
+    @*END: 2nd Search Values Row*@
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public AdvancedSearchParameters Model { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmitCallBack { get; set; }
+
+    void Reset(EventArgs eventArgs)
+    {
+        Model.Reset();
+        this.StateHasChanged();
+    }
+
+    private EditContext _editContext { get; set; }
+
+    #region InputSelectOptionsSearchParameters
+    // Search Modifiers
+    private string _NoOfSearchValues { get => Model.NoOfSearchValues.ToString(); set => Model.NoOfSearchValues = int.Parse(value); }
+    private string _NoOfWeeksToDisplay { get => Model.NoOfWeeksToDisplay.ToString(); set => Model.NoOfWeeksToDisplay = int.Parse(value); }
+    private string _GameSelection { get => Model.GameSelection.ToString(); set => Model.GameSelection = int.Parse(value); }
+    private string _GroupSelection { get => Model.GroupSelection.ToString(); set => Model.GroupSelection = int.Parse(value); }
+    // Reference Values
+    private string _ReferenceLocation { get => Model.ReferenceLocation.ToString(); set => Model.ReferenceLocation = int.Parse(value); }
+    private string _ReferencePosition { get => Model.ReferencePosition.ToString(); set => Model.ReferencePosition = int.Parse(value); }
+    // Value 2
+    private string _Value2WeekSelect { get => Model.Value2WeekSelect.ToString(); set => Model.Value2WeekSelect = int.Parse(value); }
+    private string _Value2Location { get => Model.Value2Location.ToString(); set => Model.Value2Location = int.Parse(value); }
+    private string _Value2Position { get => Model.Value2Position.ToString(); set => Model.Value2Position = int.Parse(value); }
+    // Value 3
+    private string _Value3WeekSelect { get => Model.Value3WeekSelect.ToString(); set => Model.Value3WeekSelect = int.Parse(value); }
+    private string _Value3Location { get => Model.Value3Location.ToString(); set => Model.Value3Location = int.Parse(value); }
+    private string _Value3Position { get => Model.Value3Position.ToString(); set => Model.Value3Position = int.Parse(value); }
+    #endregion
+
+    void _GroupSelectionInput()
+    {
+        Model.GameSelection = 0;
+    }
+
+
+    int[] _SelectNoOfWeeksToDisplay;
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(Model);
+        Model.GamesList = Service.GetGames();
+        Model.GamesList.Insert(0, new GamesProcess.Models.Game { ID = 0, Name = "Search All Games in Group" });
+        Model.GamesGroups = Service.GetGameGroups();
+        Model.GamesGroups.Insert(0, new GamesProcess.Models.GamesClass { ID = 0, Name = "Search All Groups & Games" });
+
+        // Default Search Parameter Values
+        _SelectNoOfWeeksToDisplay = new int[] { 1, 2, 3, 4, 5, 10, 15, 20, 30 };
+        base.OnInitialized();
+    }
+}

@@ -1,34 +1,35 @@
-/**
- * Theme: Uplon Admin Template
- * Author: Coderthemes
- * Dashboard
- */
 
-! function($) {
+/**
+* Theme: Uplon Admin Template
+* Author: Coderthemes
+* Dashboard
+*/
+
+!function ($) {
     "use strict";
 
-    var Dashboard = function() {};
+    var Dashboard = function () { };
 
     //creates Stacked chart
-    Dashboard.prototype.createStackedChart = function(element, data, xkey, ykeys, labels, lineColors) {
-            Morris.Bar({
-                element: element,
-                data: data,
-                xkey: xkey,
-                ykeys: ykeys,
-                stacked: true,
-                labels: labels,
-                hideHover: 'auto',
-                barSizeRatio: 0.4,
-                resize: true, //defaulted to true
-                gridLineColor: '#eeeeee',
-                barColors: lineColors
-            });
-        },
+    Dashboard.prototype.createStackedChart = function (element, data, xkey, ykeys, labels, lineColors) {
+        Morris.Bar({
+            element: element,
+            data: data,
+            xkey: xkey,
+            ykeys: ykeys,
+            stacked: true,
+            labels: labels,
+            hideHover: 'auto',
+            barSizeRatio: 0.4,
+            resize: true, //defaulted to true
+            gridLineColor: '#eeeeee',
+            barColors: lineColors
+        });
+    },
 
 
         //creates Donut chart
-        Dashboard.prototype.createDonutChart = function(element, data, colors) {
+        Dashboard.prototype.createDonutChart = function (element, data, colors) {
             Morris.Donut({
                 element: element,
                 data: data,
@@ -37,7 +38,7 @@
             });
         },
 
-        Dashboard.prototype.init = function() {
+        Dashboard.prototype.init = function () {
 
             //creating Stacked chart
             var $stckedData = [
@@ -67,8 +68,8 @@
         $.Dashboard = new Dashboard, $.Dashboard.Constructor = Dashboard
 }(window.jQuery),
 
-//initializing
-function($) {
-    "use strict";
-    $.Dashboard.init();
-}(window.jQuery);
+    //initializing
+    function ($) {
+        "use strict";
+        $.Dashboard.init();
+    }(window.jQuery);

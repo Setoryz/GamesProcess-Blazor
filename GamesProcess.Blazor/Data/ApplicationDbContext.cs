@@ -17,6 +17,7 @@ namespace GamesProcess.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<AdvancedSearchParameters> AdvancedSearchParameters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,7 @@ namespace GamesProcess.Data
             modelBuilder.Entity<Game>().ToTable("Game");
             modelBuilder.Entity<Event>().ToTable("Event");
             modelBuilder.Entity<TodoItem>().ToTable("TodoItem");
+            modelBuilder.Entity<AdvancedSearchParameters>().ToTable("AdvancedSearchParameter");
         }
     }
 }

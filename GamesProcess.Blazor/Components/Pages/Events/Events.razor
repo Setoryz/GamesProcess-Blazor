@@ -5,6 +5,7 @@
 @using GamesProcess.Blazor.Components.Shared.EventsComponents
 @inherits OwningComponentBase<GamesProcess.Data.Services.ApplicationDbService>
 
+<PageTitle Title="All Events"/>
 <BodyTopBar PageTitle="All Events" RouteTitle="Events" RouteLink="/Events" />
 
 <Row>
@@ -58,7 +59,7 @@
                 </tr>
             </thead>
 
-            <EventsTBody Events="((_events == null) ? null : _events.Skip(CurrentSkip).Take(AmountToDisplay).ToList())" />
+            <EventsTBody Events="((_events == null) ? null : _events.Skip(CurrentSkip).Take(AmountToDisplay).ToList())"/>
 
         </table>
 

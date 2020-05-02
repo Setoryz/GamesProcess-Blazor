@@ -10,8 +10,10 @@ namespace GamesProcess.Models
         public Event()
         {
             // create array values that will be used in getting the array data that will parsed to string format
-            arrWinning = new int[5];
-            arrMachine = new int[5];
+            //arrWinning = new int[5];
+            Winning = new int[5];
+            //arrMachine = new int[5];
+            Machine = new int[5];
         }
 
         [Key]
@@ -31,33 +33,39 @@ namespace GamesProcess.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
-        [NotMapped]
-        private int[] arrWinning;
+        //[NotMapped]
+        //private int[] arrWinning;
         [NotMapped]
         public int[] Winning
         {
-            get { return arrWinning; }
-            set { arrWinning = value; }
+            get { return WinningValues.Split(',').Select(int.Parse).ToArray(); }
+            set { WinningValues = String.Join(",", value.Select(p => p.ToString())); }
         }
 
         public string WinningValues
         {
-            get => String.Join(",", arrWinning.Select(p => p.ToString()));
-            set => arrWinning = value.Split(',').Select(int.Parse).ToArray();
+            get;
+            //get => String.Join(",", arrWinning.Select(p => p.ToString()));
+            set;
+            //set => arrWinning = value.Split(',').Select(int.Parse).ToArray();
         }
 
-        [NotMapped]
-        private int[] arrMachine;
+        //[NotMapped]
+        //private int[] arrMachine;
         [NotMapped]
         public int[] Machine
         {
-            get { return arrMachine; }
-            set { arrMachine = value; }
+            //get { return arrMachine; }
+            get { return MachineValues.Split(',').Select(int.Parse).ToArray(); }
+            //set { arrMachine = value; }
+            set { MachineValues = String.Join(",", value.Select(p => p.ToString())); }
         }
         public string MachineValues
         {
-            get => String.Join(",", arrMachine.Select(p => p.ToString()));
-            set => arrMachine = value.Split(',').Select(int.Parse).ToArray();
+            //get => String.Join(",", arrMachine.Select(p => p.ToString()));
+            get;
+            //set => arrMachine = value.Split(',').Select(int.Parse).ToArray();
+            set;
         }
     }
 }

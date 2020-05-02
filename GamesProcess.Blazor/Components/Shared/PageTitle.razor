@@ -1,0 +1,23 @@
+﻿@inject IJSRuntime JSRuntime
+
+@code{
+    private String _title;
+    [Parameter]
+    public String Title
+    {
+        get { return _title; }
+        set { _title = value; setTitle(); }
+    }
+
+    protected override void OnInitialized()
+    {
+        setTitle();
+    }
+
+    private void setTitle()
+    {
+        System.Console.WriteLine($"Blazor setting Title to: {this._title} - Games Process");
+        JSRuntime.InvokeAsync<string>("setTitle", new object[] { this._title });
+    }
+
+}
