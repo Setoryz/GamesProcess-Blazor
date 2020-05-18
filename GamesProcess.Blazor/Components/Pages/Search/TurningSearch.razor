@@ -50,7 +50,8 @@
 </Row>
 
 @code {
-    private TurningSearchResultViewModel _SearchResultViewModel { get; set; } = new TurningSearchResultViewModel() { SearchResults = null };
+    private TurningSearchResultViewModel _SearchResultViewModel { get; set; }
+        = new TurningSearchResultViewModel() { SearchResults = null };
 
     private TurningSearchParametersComponent searchParametersComponent;
 
@@ -65,8 +66,13 @@
         this.StateHasChanged();
 
         _SearchResultViewModel.SearchParameters = searchParametersComponent.Model;
-        _SearchResultViewModel.SearchResults = await Service.GetTurningSearchResultsAsync(_SearchResultViewModel.SearchParameters);
-        _resultLoading = false;
+        for (int i = 1; i <= 90; i++)
+        {
+            _SearchResultViewModel.SearchParameters.SetValues(i);
+            _SearchResultViewModel.SearchResults = await Service.GetTurningSearchResultsAsync(_SearchResultViewModel.SearchParameters);
+            _resultLoading = false;
+            this.StateHasChanged();
+        }
         this.StateHasChanged();
     }
 

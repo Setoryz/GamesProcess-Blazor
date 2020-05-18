@@ -42,19 +42,22 @@ namespace GamesProcess.Models
         [NotMapped]
         public List<GamesClass> GamesGroups { get; set; }
 
-        [Display(Name = "Reference Value")]
-        [Range(1,90)]
-        public int ReferenceValue { get; set; }
+        public void SetValues(int value)
+        {
+            ReferenceValue = value;
+            TurnedValue = ((value % 10) * 10) + ((value - (value % 10)) / 10);
+        }
+        // [Display(Name = "Reference Value")]
+        //[Range(1, 90)]
+        public int ReferenceValue { private set; get; }
+
         [Display(Name = "Where to Search Reference Value")]
         public int ReferenceLocation { get; set; } = 0;
         [Display(Name = "Reference Value Position")]
         public int ReferencePosition { get; set; } = 0;
 
-        [Display(Name = "Turned Value")]
-        public int TurnedValue
-        {
-            get => ((ReferenceValue % 10) * 10) + ((ReferenceValue - (ReferenceValue % 10))/10);
-        }
+        //[Display(Name = "Turned Value")]
+        public int TurnedValue { private set; get; }
         [Display(Name = "Use Specified Week or Range of Weeks")]
         public int TurnedValueWeekSelect { get; set; } = 1;
         [Display(Name = "Weeks Apart for Turned Value")]

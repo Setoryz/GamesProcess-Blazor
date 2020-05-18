@@ -39,11 +39,9 @@
                 <label>Game Selection</label>
                 <InputSelect @bind-Value="_GameSelection" class="form-control">
                     @foreach (var item in Model.GamesList.Where(s => s.GamesClassID == Model.GroupSelection || s.GamesClassID == 0))
-                        {
+                     {
                         <option value="@item.ID">@( item.ID != 0 ? item.Name : $"Search all games in {Model.GamesGroups.Where(s => s.ID == Model.GroupSelection).First().Name}")</option>
-                        }
-                    /**/
-                    /**/
+                     }
                 </InputSelect>
                 <small class="text-muted"> This is the type of game where the search will be performed </small>
             </FormFieldset>
@@ -54,22 +52,6 @@
     @*BEGIN: Reference Values Row*@
     <hr style="border-width: thick;" />
     <Row>
-        <FormFieldset HasTopSmMargin="false">
-            <label>Reference Value</label>
-            <InputNumber @bind-Value="Model.ReferenceValue" class="form-control" placeholder="Enter Reference Value" />
-            <ValidationMessage For="(() => Model.ReferenceValue)" style="color: red;" />
-        </FormFieldset>
-
-        <FormFieldset>
-            <label>Where to Search Reference Value</label>
-            <InputSelect @bind-Value="_ReferenceLocation" class="form-control">
-                @foreach (var item in Model.SelectLocation)
-                {
-                    <option value="@item.ID">@item.Name</option>
-                }
-            </InputSelect>
-        </FormFieldset>
-
         <FormFieldset>
             <label>Reference Value Position</label>
             <InputSelect @bind-Value="_ReferencePosition" class="form-control">
@@ -85,11 +67,6 @@
     @*BEGIN: 2nd Search Values Row*@
     <hr style="border-width: thick;" />
     <Row>
-        <FormFieldset HasTopSmMargin="false">
-            <label>Turned Value</label>
-            <input type="number" disabled value="@Model.TurnedValue" class="form-control" />
-        </FormFieldset>
-
         <FormFieldset>
             <label>Use Specified Week or Range of Weeks</label>
             <InputSelect @bind-Value="_TurnedValueWeekSelect" class="form-control">
@@ -97,12 +74,11 @@
                 {
                     <option value="@item.ID">@item.Name</option>
                 }
-                /**/
             </InputSelect>
         </FormFieldset>
 
         <FormFieldset>
-            <label>@((Model.TurnedValueWeekSelect == 1) ? "Weeks Apart" : "Weeks Range") for 2nd Search Value</label>
+            <label>@((Model.TurnedValueWeekSelect == 1) ? "Weeks Apart" : "Weeks Range") for Turned Search Value</label>
             <InputNumber @bind-Value="Model.TurnedValueWeek" class="form-control" placeholder="@((Model.TurnedValueWeekSelect==1) ? "Enter Weeks Apart" : "Enter Range of Weeks")" />
             <ValidationMessage For="(() => Model.TurnedValueWeek)" style="color: red;" />
         </FormFieldset>
@@ -114,7 +90,6 @@
                 {
                     <option value="@item.ID">@item.Name</option>
                 }
-                /**/
             </InputSelect>
         </FormFieldset>
 
@@ -125,14 +100,13 @@
                 {
                     <option value="@item.ID">@item.Name</option>
                 }
-                /**/
             </InputSelect>
         </FormFieldset>
     </Row>
     @*END: 2nd Search Values Row*@
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" class="btn btn-outline-primary">Submit</button>
+    <button type="reset" class="btn btn-outline-warning">Reset</button>
 </EditForm>
 
 @code {
